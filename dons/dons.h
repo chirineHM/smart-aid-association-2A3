@@ -1,42 +1,51 @@
-#ifndef ANIMAUX_H
-#define ANIMAUX_H
-#include <QString>
+#ifndef STOCK_H
+#define STOCK_H
+
+#include<QString>
 #include <QDate>
-#include <QMessageBox>
-#include <QSqlQueryModel>
-#include <QSqlQuery>
-
-
-class Dons
+#include<QSqlQueryModel>
+#include <qcustomplot.h>
+class dons
 {
-
-    int Id_don,id_donneur,id_employe;
-    QString type_don	;
-    QString quantite_don	;
-    QString date_don	;
-
 public:
-    Dons();
-    Dons(int,int,int,QString,QString,QString);
+    dons();
+    dons(int,int,int,QString,QString,QDate);
     int getid();
-    int getid_d();
     int getid_e();
+    int getid_d();
+    QDate getdate();
     QString gettype();
-    QString getquantite();
-    QString getdate();
-
+    QString getquant();
     void setid(int);
-    void setid_d(int);
     void setid_e(int);
+    void setid_d(int);
     void settype(QString);
-    void setquantite(QString);
-    void setdate(QString);
-
-    bool ajouter();
+    void setquant(QString);
+    void setdate(QDate);
+    bool add();
     QSqlQueryModel* afficher();
     bool supprimer(int);
+    bool modifier();
+    QSqlQueryModel * trie_TYPE();
+    QSqlQueryModel * trie_QUANTITE();
+    QSqlQueryModel * trie_DATE();
+    //QSqlQueryModel* afficher1();
+    bool rech(int);
+    QSqlQueryModel* rechercher(QString);
+    bool rechtype(QString);
+    QSqlQueryModel* recherchertype(QString);
+    bool rechquantite(QString);
+    QSqlQueryModel* rechercherquantite(QString);
+  void statistique(QVector<double>* ticks,QVector<QString> *labels);
+  dons PDF();
 
-
+private:
+    int id_don;
+    int id_employe;
+    int id_donneur;
+    QString type_don;
+    QString quantite_don;
+    QDate date_don;
 };
 
-#endif // ANIMAUX_H
+#endif // STOCK_H
