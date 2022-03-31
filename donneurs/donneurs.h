@@ -1,6 +1,6 @@
 #ifndef MATERIAUX_H
 #define MATERIAUX_H
-#include "materiel.h"
+#include "donneur.h"
 #include <QDialog>
 
 namespace Ui {

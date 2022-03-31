@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include "connection.h"
-#include "materiel.h"
+#include "donneur.h"
 #include <QFile>
 
 int main(int argc, char *argv[])

@@ -11,16 +11,16 @@ CONFIG += shared@
 
 SOURCES += \
     connection.cpp \
+    donneur.cpp \
     donneurs.cpp \
     main.cpp \
-    mainwindow.cpp \
-    materiel.cpp
+    mainwindow.cpp
 
 HEADERS += \
     connection.h \
+    donneur.h \
     donneurs.h \
-    mainwindow.h \
-    materiel.h
+    mainwindow.h
 
 FORMS += \
     donneurs.ui \

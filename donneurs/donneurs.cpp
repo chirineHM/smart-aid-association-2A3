@@ -1,6 +1,6 @@
 #include "donneurs.h"
 #include "ui_donneurs.h"
-#include "materiel.h"
+#include "donneur.h"
 #include <QMessageBox>
 
 donneurs::donneurs(QWidget *parent) :

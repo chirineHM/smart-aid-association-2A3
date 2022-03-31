@@ -1,4 +1,4 @@
-#include "materiel.h"
+#include "donneur.h"
 #include <QDate>
 
 donneur::donneur(int id,QString nom,QString prenom,int tel,QString adresse,QDate date)
