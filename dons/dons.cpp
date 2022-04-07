@@ -188,7 +188,7 @@ void dons::statistique(QVector<double>* ticks,QVector<QString> *labels)
 {
  QSqlQuery query,query1;
 
-    query.prepare("SELECT COUNT(DISTINCT id_don) FROM dons where quantite_don between  0 and 500");////////////////
+    query.prepare("SELECT quantite_don FROM dons where quantite_don between  0 and 20");////////////////
     query.exec();
     int un;
     while(query.next())
@@ -196,7 +196,7 @@ void dons::statistique(QVector<double>* ticks,QVector<QString> *labels)
         un=query.value(0).toInt();
         qDebug()<<un;
     }
-    query.prepare("SELECT COUNT(DISTINCT id_don) FROM dons where quantite_don between 50 and 150");/////////////////
+    query.prepare("SELECT quantite_don FROM dons where quantite_don between 20 and 35");/////////////////
     query.exec();
     int deux;
     while(query.next())
@@ -204,19 +204,12 @@ void dons::statistique(QVector<double>* ticks,QVector<QString> *labels)
         deux=query.value(0).toInt();
     }
 
-    query.prepare("SELECT COUNT(DISTINCT id_don) FROM dons where quantite_don between 500 and 1000");///////////////
+    query.prepare("SELECT quantite_don FROM dons where quantite_don between 35 and 50");///////////////
     query.exec();
     int trois;
     while(query.next())
     {
         trois=query.value(0).toInt();
-    }
-    query.prepare("SELECT COUNT(DISTINCT id_don) FROM dons where quantite_don between 1000 and 2000");///////////////
-    query.exec();
-    int quatre;
-    while(query.next())
-    {
-        quatre=query.value(0).toInt();
     }
 
 
@@ -224,7 +217,7 @@ void dons::statistique(QVector<double>* ticks,QVector<QString> *labels)
 
 
     *ticks << 1 << 2 << 3  ;
-    *labels << "[0,500]" << "[500,1000]" << "[1000,2000]" ;///////////////////////////////
+    *labels << "[0,20]" << "[20,35]" << "[35,50]" ;///////////////////////////////
     QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
     textTicker->addTicks(*ticks, *labels);
 }

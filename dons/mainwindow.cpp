@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
      modal->setQuery(*qry);
      ui->combosupp->setModel(modal);
      ui->tab_modif->setModel(modal);
+     popUp = new PopUp();
 
 
 
@@ -43,7 +44,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_pushButton_4_clicked()
+{
+    popUp->setPopupText(ui->textEdit->toPlainText());
 
+    popUp->show();
+}
 
 void MainWindow::on_add_clicked()
 {

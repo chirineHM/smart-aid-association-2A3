@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "dons.h"
+#include "popup.h"
 
 #include <QMainWindow>
 #include <QTableWidget>
@@ -50,9 +51,12 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_pushButton_4_clicked();
+
 private:
     Ui::MainWindow *ui;
 dons d;
+ PopUp *popUp;
 };
 
 #endif // MAINWINDOW_H
