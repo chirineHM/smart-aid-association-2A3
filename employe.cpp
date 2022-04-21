@@ -11,9 +11,9 @@
 
 Employe::Employe()
 {
-  id_emp=0;tel_emp=0;nom_emp="";prenom_emp="";adresse_emp="";date_naiss_emp="";sexe_emp="";email="";
+  id_emp=0;tel_emp=0;nom_emp="";prenom_emp="";adresse_emp="";date_naiss_emp="";sexe_emp="";email="";rfid="";
 }
-Employe::Employe(int id_emp,int tel_emp,QString nom_emp,QString prenom_emp,QString adresse_emp,QString date_naiss_emp,QString sexe_emp,QString email)
+Employe::Employe(int id_emp,int tel_emp,QString nom_emp,QString prenom_emp,QString adresse_emp,QString date_naiss_emp,QString sexe_emp,QString email,QString rfid)
 {
     this->id_emp=id_emp;
     this->tel_emp=tel_emp;
@@ -23,6 +23,7 @@ Employe::Employe(int id_emp,int tel_emp,QString nom_emp,QString prenom_emp,QStri
     this->date_naiss_emp=date_naiss_emp;
     this->sexe_emp=sexe_emp;
     this->email=email;
+    this->rfid=rfid;
 }
 int Employe::getid_emp(){return id_emp;}
 int Employe::gettel_emp(){return tel_emp;}
@@ -32,6 +33,7 @@ QString Employe::getadresse_emp(){return adresse_emp;}
 QString Employe::getdate_naiss_emp(){return date_naiss_emp;}
 QString Employe::getsexe_emp(){return sexe_emp;}
 QString Employe::getemail(){return email;}
+QString Employe::getrfid(){return rfid;}
 
 void Employe::setid_emp(int id_emp){this->id_emp=id_emp;}
 void Employe::settel_emp(int tel_emp){this->tel_emp=tel_emp;}
@@ -41,6 +43,7 @@ void Employe::setadresse_emp(QString adresse_emp){this->adresse_emp=adresse_emp	
 void Employe::setdate_naiss_emp(QString date_naiss_emp) {this->date_naiss_emp=date_naiss_emp;}
 void Employe::setsexe_emp(QString sexe_emp){this->sexe_emp=sexe_emp;}
 void Employe::setemail(QString email){this->email=email;}
+void Employe::setrfid(QString rfid){this->rfid=rfid;}
 
 bool Employe::ajouter()
 {
@@ -48,8 +51,8 @@ bool Employe::ajouter()
     QString id_QString=QString::number(id_emp);
     QString tel_QString=QString::number(tel_emp);
         QSqlQuery query;
-              query.prepare("INSERT INTO Employe (id_emp, nom_emp, prenom_emp, sexe_emp, adresse_emp, tel_emp, date_naiss_emp, email) "
-                            "VALUES (:id_emp, :nom_emp, :prenom_emp, :sexe_emp, :adresse_emp, :tel_emp, :date_naiss_emp_emp, :email)");
+              query.prepare("INSERT INTO Employe (id_emp, nom_emp, prenom_emp, sexe_emp, adresse_emp, tel_emp, date_naiss_emp, email,rfid) "
+                            "VALUES (:id_emp, :nom_emp, :prenom_emp, :sexe_emp, :adresse_emp, :tel_emp, :date_naiss_emp_emp, :email, :rfid)");
               query.bindValue(0, id_QString);
               query.bindValue(1, nom_emp);
               query.bindValue(2, prenom_emp);
@@ -58,6 +61,7 @@ bool Employe::ajouter()
               query.bindValue(5, tel_QString);
               query.bindValue(6, date_naiss_emp);
               query.bindValue(7, email);
+              query.bindValue(8, rfid);
 
 
             return  query.exec();
@@ -76,6 +80,7 @@ QSqlQueryModel* Employe::afficher()
             model->setHeaderData(5, Qt::Horizontal, QObject::tr("tel employé"));
             model->setHeaderData(6, Qt::Horizontal, QObject::tr("date naissance employé"));
             model->setHeaderData(7, Qt::Horizontal, QObject::tr("email employé"));
+            model->setHeaderData(8, Qt::Horizontal, QObject::tr("rfid employé"));
 
 
 
@@ -95,7 +100,7 @@ bool Employe::modifier()
     {
 
         QSqlQuery query;
-            query.prepare("UPDATE Employe SET nom_emp= :nom_emp, prenom_emp= :prenom_emp, sexe_emp= :sexe_emp, adresse_emp= :adresse_emp, tel_emp= :tel_emp, date_naiss_emp= :date_naiss_emp, email= :email WHERE id_emp= :id_emp ");
+            query.prepare("UPDATE Employe SET nom_emp= :nom_emp, prenom_emp= :prenom_emp, sexe_emp= :sexe_emp, adresse_emp= :adresse_emp, tel_emp= :tel_emp, date_naiss_emp= :date_naiss_emp, email= :email, rfid= :rfid WHERE id_emp= :id_emp ");
             query.bindValue(":id_emp", id_emp);
             query.bindValue(":nom_emp", nom_emp);
             query.bindValue(":prenom_emp", prenom_emp);
@@ -104,6 +109,7 @@ bool Employe::modifier()
             query.bindValue(":tel_emp", tel_emp);
             query.bindValue(":date_naiss_emp", date_naiss_emp);
             query.bindValue(":email", email);
+            //query.bindValue(":rfid", rfid);
              return query.exec();
 
     }
@@ -177,3 +183,12 @@ QSqlQuery Employe::verif(QString cin)
     return query;
 }
 
+bool Employe::rechCarte(QString num)
+{
+    QSqlQuery q("select * from Employe where rfid='"+num+"'");
+    while (q.next()) {
+
+        return true;
+    }
+    return false;
+}

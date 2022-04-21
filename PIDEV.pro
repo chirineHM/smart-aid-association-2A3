@@ -1,5 +1,6 @@
 QT       += core gui sql
 QT        +=core gui svg
+QT    +=serialport
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -23,7 +24,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     profils.cpp \
-    qrcode.cpp
+    qrcode.cpp \
+    rfid.cpp
 
 HEADERS += \
     connection.h \
@@ -32,7 +34,8 @@ HEADERS += \
     login.h \
     mainwindow.h \
     profils.h \
-    qrcode.h
+    qrcode.h \
+    rfid.h
 
 FORMS += \
     gestion_employe.ui \

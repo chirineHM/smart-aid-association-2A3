@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "employe.h"
 #include "profils.h"
+#include "rfid.h"
 
 namespace Ui {
 class Gestion_Employe;
@@ -40,13 +41,22 @@ private slots:
 
     void on_deconnexion_clicked();
     void on_pushButton_24_clicked();
+    void update_label_uid();
+
 
 private:
     Ui::Gestion_Employe *ui;
     Employe E;
     Employe E2;
     profils p;
+    QString data;
+    Arduino A;
+    QString uid;
 
 };
+
+
+
+
 
 #endif // GESTION_EMPLOYE_H

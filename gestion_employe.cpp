@@ -48,6 +48,17 @@ Gestion_Employe::Gestion_Employe(QWidget *parent) :
 
         ui->comboBoxModif->setModel(E.remplircomboEmploye());
 
+        int ret=A.connect_arduino();
+            switch(ret){
+            case(0):qDebug()<< "arduino is available and is connected to : "<<A.getArduino_port_name();
+                break;
+            case(1):qDebug()<<"arduino is available but not connected to : "<<A.getArduino_port_name();
+                break;
+            case(-1):qDebug()<<"arduino is not available";
+            }
+            QObject::connect(A.getSerial(), SIGNAL(readyRead()), this, SLOT(update_label_uid()));
+
+
 
 }
 
@@ -67,10 +78,11 @@ void Gestion_Employe::on_ajouter_clicked()
     QString date_naiss_emp=ui->le_date->text();
     QString sexe_emp=ui->le_sexe->text();
     QString email=ui->le_email_2->text();
+    QString rfid=ui->rfid->currentText();
 
  ui->table_employes->setModel(E.afficher());
 
- Employe E(id_emp, tel_emp, nom_emp, prenom_emp, adresse_emp, date_naiss_emp, sexe_emp, email);
+ Employe E(id_emp, tel_emp, nom_emp, prenom_emp, adresse_emp, date_naiss_emp, sexe_emp, email, rfid);
  bool test=E.ajouter();
  if(test)
 
@@ -284,6 +296,13 @@ void Gestion_Employe::on_PDF_clicked()
     painter.drawText(10000,3300,"TEL EMPLOYE");
     painter.drawText(10200,3300,"DATE NAISSANCE EMPLOYE");
     painter.drawText(10400,3300,"EMAIL EMPLOYE");
+    painter.drawText(10600,3300,"RFID EMPLOYE");
+
+
+    const QImage image("C:/Users/planet/Desktop/PIDEVCopie/logo_qt.jpg");
+                const QPoint imageCoordinates(1,1);
+                painter.drawImage(imageCoordinates,image);
+
     QSqlQuery query;
     query.prepare("select * from Employe");
     query.exec();
@@ -427,6 +446,7 @@ void Gestion_Employe::on_comboBoxModif_currentIndexChanged(const QString &arg1)
             ui->tel_modif->setText(query.value(5).toString());
             ui->date_modif->setText(query.value(6).toString());
             ui->email_modif->setText(query.value(7).toString());
+           // ui->email_modif->setText(query.value(7).toString());
         }
     }
 
@@ -435,9 +455,9 @@ void Gestion_Employe::on_comboBoxModif_currentIndexChanged(const QString &arg1)
 
 void Gestion_Employe::on_ModifierBouton_clicked()
 {
-    if((ui->nom_modif->text() != "") &&(ui->prenom_modif->text() != "")&&(ui->adresse_modif->text() != ""))
+    if((ui->nom_modif->text() != "") &&(ui->prenom_modif->text() != "")&&(ui->adresse_modif->text() != "")&&(ui->new_rfid->currentText()!= ""))
     {
-        Employe tmp(ui->comboBoxModif->currentText().toInt(),ui->tel_modif->text().toInt(),ui->nom_modif->text(),ui->prenom_modif->text(),ui->adresse_modif->text(),ui->date_modif->text(),ui->sexe_modif->text(),ui->email_modif->text());
+        Employe tmp(ui->comboBoxModif->currentText().toInt(),ui->tel_modif->text().toInt(),ui->nom_modif->text(),ui->prenom_modif->text(),ui->adresse_modif->text(),ui->date_modif->text(),ui->sexe_modif->text(),ui->email_modif->text(),ui->new_rfid->currentText());
         if(tmp.modifier())
         {
             //refresh combobox + tableau
@@ -505,7 +525,7 @@ void Gestion_Employe::on_pushButton_24_clicked()
 {
     if(ui->table_employes->currentIndex().row()==-1)
                   QMessageBox::information(nullptr, QObject::tr("QrCode"),
-                                           QObject::tr("Veuillez Choisir un client du Tableau.\n"
+                                           QObject::tr("Veuillez Choisir un employé du Tableau.\n"
                                                        "Click Ok to exit."), QMessageBox::Ok);
               else
               {
@@ -527,4 +547,39 @@ void Gestion_Employe::on_pushButton_24_clicked()
                                                                  pix.save(&file, "PNG");
 
               }
+}
+
+
+
+
+void Gestion_Employe::update_label_uid()
+{
+    data.append(A.read_from_arduino());
+if(data.length()==11){
+    QString message="";
+    if (E.rechCarte(data) )
+       { QSqlQuery q("select * from employe where rfid='"+data+"'");
+        while (q.next()) {
+
+            message="L'employé de rfid "+q.value(8).toString()+" existe dans notre base de données";
+}
+
+       /* QMessageBox::information(nullptr, QObject::tr(""),
+         QObject::tr(message"click cancel to exit . ") , QMessageBox::Cancel);*/
+        QMessageBox::information(this,"employé existant " , message,QMessageBox::Ok);
+         A.write_to_arduino("1");
+
+
+    data.clear();
+        }
+    else
+    {    QMessageBox::critical(nullptr, QObject::tr("employé n'existe pas"),
+         QObject::tr("employé n'existe pas.\n"
+                     "click cancel to exit . ") , QMessageBox::Cancel);
+        A.write_to_arduino("0");
+
+    data.clear();
+    }
+}
+
 }

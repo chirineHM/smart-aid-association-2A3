@@ -17,10 +17,11 @@ class Employe
     QString date_naiss_emp;
     QString sexe_emp;
     QString email;
+    QString rfid;
 
 public:
     Employe();
-    Employe(int,int,QString,QString,QString,QString,QString,QString);
+    Employe(int,int,QString,QString,QString,QString,QString,QString,QString);
     int getid_emp();
     int gettel_emp();
     QString getnom_emp();
@@ -29,6 +30,8 @@ public:
     QString getdate_naiss_emp();
     QString getsexe_emp();
     QString getemail();
+    QString getrfid();
+
 
     void setid_emp(int);
     void settel_emp(int);
@@ -38,6 +41,7 @@ public:
     void setdate_naiss_emp(QString);
    void setsexe_emp(QString);
    void setemail(QString);
+   void setrfid(QString);
 
     bool ajouter();
     QSqlQueryModel* afficher();
@@ -51,6 +55,9 @@ public:
     QSqlQuery request(QString);
 
     QSqlQuery verif(QString);
+    QSqlQueryModel *rechercher_rfid(QString);
+    QSqlQueryModel *affichercin();
+    bool rechCarte(QString num);
 
 };
 
