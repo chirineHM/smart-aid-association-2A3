@@ -1,0 +1,81 @@
+#include "stock.h"
+#include <QSqlQuery>
+#include <QDebug>
+#include <QObject>
+stock::stock()
+{
+    id_s=" ";
+    nom_matiere=" ";
+    quantite=0;
+    date_prochain_achat=QDate();
+    date_dernier_achat=QDate();
+    categorie=" ";
+}
+stock::stock(QString id,QString nom,int quant,QDate dpa,QDate dda,QString cat)
+{
+    this->id_s=id;
+    this->nom_matiere=nom;
+    this->quantite=quant;
+    this->date_prochain_achat=dpa;
+    this->date_dernier_achat=dda;
+    this->categorie=cat;
+}
+QString stock::getid(){return id_s;}
+QString stock::getnom(){return nom_matiere;}
+int stock::getquant(){return quantite;}
+QDate stock::getdate2(){return date_prochain_achat;}
+QDate stock::getdate(){return date_dernier_achat;}
+QString stock::getcat(){return categorie;}
+void stock::setid(QString id){this->id_s=id;}
+void stock::setnom(QString nom){this->nom_matiere=nom;}
+void stock::setquant(int quant){this->quantite=quant;}
+void stock::setdate(QDate dpa){this->date_prochain_achat=dpa;}
+void stock::setdate1(QDate dda){this->date_dernier_achat=dda;}
+void stock::setcat(QString cat){this->categorie=cat;}
+bool stock::add()
+{
+    QString quantite_string=QString::number(quantite);
+    QSqlQuery query;
+          query.prepare("INSERT INTO STOCKS (id_s, nom_matiere, quantite, date_prochain_achat, date_dernier_achat, categorie) "
+                        "VALUES (:id, :nom, :quant, :dpa, :dda, :cat)");
+          query.bindValue(0, id_s);
+          query.bindValue(1, nom_matiere);
+          query.bindValue(2, quantite_string);
+          query.bindValue(3, date_prochain_achat);
+          query.bindValue(4, date_dernier_achat);
+          query.bindValue(5, categorie);
+          return  query.exec();
+
+}
+
+QSqlQueryModel* stock::afficher()
+{
+    QSqlQueryModel* model=new QSqlQueryModel;
+          model->setQuery("SELECT * FROM STOCKS");
+          model->setHeaderData(0, Qt::Horizontal, QObject::tr("id_s"));
+          model->setHeaderData(1, Qt::Horizontal, QObject::tr("nom_matiere"));
+          model->setHeaderData(2, Qt::Horizontal, QObject::tr("quantite"));
+          model->setHeaderData(3, Qt::Horizontal, QObject::tr("date_prochain_achat"));
+          model->setHeaderData(4, Qt::Horizontal, QObject::tr("date_dernier_achat"));
+          model->setHeaderData(5, Qt::Horizontal, QObject::tr("categorie"));
+    return model;
+}
+bool stock::supprimer(QString id_s)
+{
+    QSqlQuery query;
+          query.prepare("delete from stocks where id_s=:id_s ");
+          query.bindValue(0, id_s);
+          return query.exec();
+}
+bool stock::modifier()
+{
+    QSqlQuery query; 
+          query.prepare("UPDATE stocks set nom_matiere=:nom_matiere,quantite=:quantite,date_prochain_achat=:date_prochain_achat,date_dernier_achat=:date_dernier_achat,categorie=:categorie where id_s=:id_s");
+          query.bindValue(":id_s",id_s);
+          query.bindValue(":nom_matiere",nom_matiere);
+          query.bindValue(":quantite",quantite);
+          query.bindValue(":date_prochain_achat",date_prochain_achat);
+          query.bindValue(":date_dernier_achat",date_dernier_achat);
+          query.bindValue(":categorie",categorie);
+          return query.exec();
+}
